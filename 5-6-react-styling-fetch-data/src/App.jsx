@@ -204,6 +204,46 @@ export default function App() {
      ========================================================= */
   useEffect(() => {
     // TODO 2.1: Implement fetching users here (see lab instructions)
+
+    async function fetchUsers() {
+      try {
+        // 1) setLoading(true)
+        setLoading(true);
+
+        // 2) setError(null)
+        setError(null);
+
+        // 3) fetch from:
+        //    "https://jsonplaceholder.typicode.com/users"
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+
+        // Check response.ok and throw Error if false
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+
+        // 4) Convert response to JSON
+        const data = await response.json();
+
+        // 5) Store the result:
+        //    setUsers(data)
+        //    setFilteredUsers(data)
+        setUsers(data);
+        setFilteredUsers(data);
+      } catch (err) {
+        // 6) On error:
+        //    setError(err.message)
+        setError(err.message);
+      } finally {
+        // 7) Always (finally):
+        //    setLoading(false)
+        setLoading(false);
+      }
+    }
+
+    fetchUsers();
   }, []);
 
   /* =========================================================
@@ -215,6 +255,25 @@ export default function App() {
      ========================================================= */
   useEffect(() => {
     // TODO 2.2: Implement filtering users here (see lab instructions)
+
+    // 1) If searchTerm is empty:
+    //    setFilteredUsers(users)
+    if (searchTerm === "") {
+      setFilteredUsers(users);
+    } else {
+      // 2) Else:
+      //    - filter users by name ONLY
+      //    - case-insensitive match using includes()
+      //    - Always compute from full users array
+      const filtered = users.filter((user) =>
+        user.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      );
+
+      //    - then setFilteredUsers(filtered)
+      setFilteredUsers(filtered);
+    }
   }, [searchTerm, users]);
 
   // Modal handlers (already complete)
