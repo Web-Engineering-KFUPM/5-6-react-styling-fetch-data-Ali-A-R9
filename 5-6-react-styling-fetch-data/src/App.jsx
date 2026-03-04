@@ -256,24 +256,19 @@ export default function App() {
   useEffect(() => {
     // TODO 2.2: Implement filtering users here (see lab instructions)
 
-    // 1) If searchTerm is empty:
-    //    setFilteredUsers(users)
-    if (searchTerm === "") {
+    // If searchTerm is empty, reset to full users list
+    if (!searchTerm) {
       setFilteredUsers(users);
-    } else {
-      // 2) Else:
-      //    - filter users by name ONLY
-      //    - case-insensitive match using includes()
-      //    - Always compute from full users array
-      const filtered = users.filter((user) =>
-        user.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      );
-
-      //    - then setFilteredUsers(filtered)
-      setFilteredUsers(filtered);
+      return;
     }
+
+    // Otherwise filter by name only (case-insensitive)
+    const filtered = users.filter((user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredUsers(filtered);
+
   }, [searchTerm, users]);
 
   // Modal handlers (already complete)
